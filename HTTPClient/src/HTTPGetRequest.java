@@ -1,4 +1,7 @@
 
-public class HTTPGetRequest {
-
+public class HTTPGetRequest extends HTTPRequest {
+	
+	public HTTPGetRequest() {}
+	
+	
 }

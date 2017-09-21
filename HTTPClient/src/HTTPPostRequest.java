@@ -1,4 +1,4 @@
 
-public class HTTPPostRequest {
+public class HTTPPostRequest extends HTTPRequest {
 
 }
