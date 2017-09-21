@@ -74,7 +74,7 @@ public class HTTPClient {
 		
 		HTTPRequest test = new HTTPRequest("httpbin.org", "GET");
 		String response = test.execute(true);
-		System.out.println(response);
+		System.out.println("Response is:\n" + response);
 	}
 
 //	public static boolean validate(String httpcCommand, boolean hasHeaders, List<String> headers, boolean hasInLineData, boolean hasFile, String url) {

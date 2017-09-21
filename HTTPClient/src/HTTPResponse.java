@@ -6,24 +6,34 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 public class HTTPResponse {
+	
+	// Attributes
+	private String response = "";
+	private SocketChannel socket;
 
+	// Default constructor
 	public HTTPResponse() {}
 	
-	public HTTPResponse(SocketChannel socket, ByteBuffer buf) {}
-	
-	public String queryParameters() {
-		return "";
+	// Constructor with a socket passed as a parameter
+	public HTTPResponse(SocketChannel socket) {
+		this.socket = socket;
 	}
 	
-	public void verbose(SocketChannel socket, ByteBuffer buf)  throws IOException {
+	// Method to query parameters of the request
+	public String queryParameters(ByteBuffer buf) throws IOException {
+		response = this.getFullResponse(buf);
+		return response; // must only take the bottom half
+	}
+	
+	// Method to get the response
+	public String getFullResponse(ByteBuffer buf) throws IOException {
     	Charset utf8 = StandardCharsets.UTF_8;
-    	String response = "";
     	while ((socket.read(buf) != -1)) {
 		    buf.flip();
 		    response += utf8.decode(buf);
 		    buf.clear();
 		}
-    	System.out.println(response);
+    	return response;
 	}
 	
 	
