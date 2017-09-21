@@ -7,13 +7,10 @@ import java.nio.channels.SocketChannel;
 
 public class HTTPClient {
 	
-	public void executeRequest() {
-		
-	}
-	
 	public static void main(String[] args) throws IOException {
 		HTTPRequest test = new HTTPRequest("httpbin.org", "GET");
-		test.execute();
+		String response = test.execute(true);
+		System.out.println("Response is:\n" + response);
 	}
 
 }
