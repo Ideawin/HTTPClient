@@ -58,42 +58,39 @@ public class HTTPClient {
     		parser.printHelpOn(System.out);
     	} else {
     		if(validate(httpcCommand, hasHeaders, headers, hasInLineData, hasFile, url)) {
-            	
+    			// TODO: parse the URL and other parameters into the HTTPRequest object
+    			HTTPRequest request = new HTTPRequest("httpbin.org", "GET");
+    			String response = test.execute(true);
+    			System.out.println("Response is:\n" + response);
             } else {
             	System.out.println("Error in httpc command.");
             }
     	}
-        
-        // For testing purposes only
-        System.out.println("Verbose:"  + opts.has("v"));
-        System.out.println("Header:" + opts.has("h"));
-        System.out.println("Headers:" + opts.valuesOf("h").size() + " " + opts.valuesOf("h"));
-        System.out.println("In-Line Data:" + opts.has("d"));
-        System.out.println("File:" + opts.has("f"));
-        parser.printHelpOn(System.out);
-		
-		HTTPRequest test = new HTTPRequest("httpbin.org", "GET");
-		String response = test.execute(true);
-		System.out.println("Response is:\n" + response);
 	}
 
-//	public static boolean validate(String httpcCommand, boolean hasHeaders, List<String> headers, boolean hasInLineData, boolean hasFile, String url) {
-//		
-//		
-//		// Validate the httpc command
-//		if(httpcCommand == null) {
-//			return false;
-//		}
-//		HashMap<String,Boolean> httpcCommands = new HashMap<String,Boolean>();
-// 		httpcCommands.put("get", true);
-// 		httpcCommands.put("post", true);
-// 		httpcCommands.put("put", false);
-//        if(!httpcCommands.containsKey(httpcCommand) || !httpcCommands.get(httpcCommand)) {
-//        	System.out.println("Invalid httpc command, type httpc -help for full list of commands.");
-//        	return false;
-//        }
-//        
-//        // If it is a get request, no in-line data or file should be provided
-//        if(httpcCommand == )
-//	}
+	public static boolean validate(String httpcCommand, boolean hasHeaders, List<String> headers, boolean hasInLineData, boolean hasFile, String url) {
+		
+		// Validate the httpc command
+		if(httpcCommand == null) {
+			return false;
+		}
+		HashMap<String,Boolean> httpcCommands = new HashMap<String,Boolean>();
+ 		httpcCommands.put("get", true);
+ 		httpcCommands.put("post", true);
+ 		httpcCommands.put("put", false);
+        if(!httpcCommands.containsKey(httpcCommand) || !httpcCommands.get(httpcCommand)) {
+        	System.out.println("Invalid httpc command, type httpc -help for full list of commands.");
+        	return false;
+        }
+        
+        // Validate get and post
+        if(httpcCommand.equals("get") && (hasInLineData || hasFile)) {
+        	System.out.println("GET method should not contain in-line data or file");
+        	return false;
+        } else if (httpcCommand.equals("post") && hasInLineData && hasFile) {
+        	System.out.println("POST only allows one of the following: in-line data OR file, but not both");
+        }
+        
+        return true;
+	}
 }
