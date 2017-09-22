@@ -78,4 +78,19 @@ public class HTTPRequest {
 	{
 		this.entityBody = body;
 	}
+	
+	// Method to set the host
+	public void setHost(String host) {
+		this.host = host;
+	}
+	
+	// Method to set the command
+	public void setMethod(String method) {
+		this.method = method;
+	}
+	
+	// Method to set the request URI
+	public void setRequestURI(String requestURI) {
+		this.requestURI = requestURI;
+	}
 }
