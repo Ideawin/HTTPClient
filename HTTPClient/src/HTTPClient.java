@@ -10,7 +10,7 @@ public class HTTPClient {
 	public static void main(String[] args) throws IOException {
 		HTTPRequest test = new HTTPRequest("httpbin.org", "GET");
 		String response = test.execute(true);
-		System.out.println("Response is:\n" + response);
+		System.out.println(response);
 	}
 
 }
