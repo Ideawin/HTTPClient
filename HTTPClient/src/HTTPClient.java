@@ -33,7 +33,7 @@ public class HTTPClient {
 	
 	// Possible errors
 	private static final String ERR_INVALID_COMMAND = "Invalid command, type httpc -help for more info";
-	private static final String ERR_INVALID_HEADER_COLON = "Invalid header, each header element should contain one and only one ':' character";
+	private static final String ERR_INVALID_HEADER_COLON = "Invalid header, each header element should contain one and only one ':' character, and should contain input from both sides of the colon";
 	private static final String ERR_GET_WITH_BODY = "GET method should not contain in-line data or file";
 	private static final String ERR_POST_DATA_AND_FILE = "POST only allows one of the following: in-line data OR file, but not both";
 	
@@ -131,7 +131,12 @@ public class HTTPClient {
         		String tempHeader = header;
         		if(tempHeader.length() - tempHeader.replace(":", "").length() == 1) { 
         			String[] headerKeyValue = header.split(":");
-					request.addRequestHeader(headerKeyValue[0], headerKeyValue[1]);
+        			if(headerKeyValue.length == 2) {
+        				request.addRequestHeader(headerKeyValue[0], headerKeyValue[1]);
+        			} else {
+        				System.err.println(ERR_INVALID_HEADER_COLON);
+        				return false;
+        			}
         		} else {
         			System.err.println(ERR_INVALID_HEADER_COLON);
         			return false;
