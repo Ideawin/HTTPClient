@@ -17,8 +17,6 @@ public class HTTPRequest {
 	private HashMap<String,String> requestHeader;
 	private String entityBody;
 	private String request;
-	//request = "GET /get?course=networking&assignment=1 HTTP/1.0\r\nHost: httpbin.org\r\n\r\n";
-	//request = "GET /status/418 HTTP/1.0\r\nHost: httpbin.org\r\n\r\n";
 	
 	/**
 	 * Default constructor
