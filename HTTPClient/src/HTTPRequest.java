@@ -20,8 +20,6 @@ public class HTTPRequest {
 	//request = "GET /get?course=networking&assignment=1 HTTP/1.0\r\nHost: httpbin.org\r\n\r\n";
 	//request = "GET /status/418 HTTP/1.0\r\nHost: httpbin.org\r\n\r\n";
 	
-	private static final String RN = "\r\n";
-	
 	/**
 	 * Default constructor
 	 */
