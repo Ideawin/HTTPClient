@@ -27,10 +27,7 @@ public class HTTPClient {
 	private static HashMap<String, Boolean> supportedCommands = null;
 	private static OptionParser parser = null;
 	private static OptionSpec<String> optSpecHeaders = null;
-	
-	// App name
-	private static final String APP_NAME = "httpc";
-	
+		
 	// Possible errors
 	private static final String ERR_INVALID_COMMAND = "Invalid command, type httpc -help for more info";
 	private static final String ERR_INVALID_HEADER_COLON = "Invalid header, each header element should contain one and only one ':' character, and should contain input from both sides of the colon";
@@ -88,24 +85,17 @@ public class HTTPClient {
 	 */
 	public static boolean processCommand(String[] args, HTTPRequest request) {
 		// Verify that we have sufficient args
-		if(args == null || args.length < 2) {
+		if(args == null || args.length < 1) {
 			System.err.println(ERR_INVALID_COMMAND);
 			return false;
 		}
-		
-		// httpc command
-        String command = args[0];
-        if(!command.equalsIgnoreCase(APP_NAME)) {
-        	System.err.println(ERR_INVALID_COMMAND);
-        	return false;
-        }
         
         // Command used (help, or http method)
-        String httpcCommand = args[1].toLowerCase(); 
+        String httpcCommand = args[0].toLowerCase(); 
         if(supportedCommands.containsKey(httpcCommand)) {
         	if(httpcCommand.equalsIgnoreCase("help")) {
         		try {
-					parser.printHelpOn(System.out);
+        			showHelp(args);
 				} catch (IOException e) {
 					System.err.println(e.getMessage());
 				}
@@ -200,5 +190,43 @@ public class HTTPClient {
 	public static String readFile(String path, Charset encoding) throws IOException {
 		byte[] encodedFileContent = Files.readAllBytes(Paths.get(path));
 		return new String (encodedFileContent, encoding);
+	}
+	
+	/**
+	 * Process the help command
+	 */
+	public static void showHelp(String[] args) throws IOException {
+		// Check if the first argument is 'help'
+		if(args != null && args.length > 0 && args[0].equalsIgnoreCase("help")) {
+			if(args.length == 1) {
+				System.out.println(
+						"httpc is a curl-like application but supports HTTP protocol only.\r\n" + 
+						"\tUsage:\r\n" + 
+						"httpc command [arguments]\r\n" + 
+						"The commands are:\r\n" + 
+						"get\texecutes a HTTP GET request and prints the response.\r\n" + 
+						"post\texecutes a HTTP POST request and prints the response.\r\n" + 
+						"help\tprints this screen.\r\n" + 
+						"Use \"httpc help [command]\" for more information about a command.");
+			} else if (args.length == 2) {
+				if(args[1].equalsIgnoreCase("get")) {
+					System.out.println("usage: httpc get [-v] [-h key:value] URL\r\n" + 
+							"Get executes a HTTP GET request for a given URL.\r\n" + 
+							"-v\tPrints the detail of the response such as protocol, status, and headers.\r\n" + 
+							"-h\tkey:value Associates headers to HTTP Request with the format 'key:value'.\r\n");
+				} else if(args[1].equalsIgnoreCase("post")) {
+					System.out.println("usage: httpc post [-v] [-h key:value] [-d inline-data] [-f file] URL\r\n" + 
+							"Post executes a HTTP POST request for a given URL with inline data or from\r\n" + 
+							"file.\r\n" + 
+							"-v\tPrints the detail of the response such as protocol, status, and headers.\r\n" + 
+							"-h\tkey:value Associates headers to HTTP Request with the format 'key:value'.\r\n" + 
+							"-d\tstring Associates an inline data to the body HTTP POST request.\r\n" + 
+							"-f\tfile Associates the content of a file to the body HTTP POST request.\r\n" + 
+							"Either [-d] or [-f] can be used but not both.");
+				} else {
+					System.out.print("Command " + args[1] + " not found.");
+				}
+			}
+		}
 	}
 }
