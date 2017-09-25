@@ -32,7 +32,8 @@ public class HTTPResponse {
 	 */
 	public String queryParameters(ByteBuffer buf) throws IOException {
 		response = this.getFullResponse(buf);
-		return response; // must only take the bottom half
+		String[] strArr = response.split("\r\n");
+		return strArr[strArr.length - 1]; // must only take the bottom half
 	}
 	
 	/**
