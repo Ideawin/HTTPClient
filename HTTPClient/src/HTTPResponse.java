@@ -11,21 +11,36 @@ public class HTTPResponse {
 	private String response = "";
 	private SocketChannel socket;
 
-	// Default constructor
+	/**
+	 * Default constructor
+	 */
 	public HTTPResponse() {}
 	
-	// Constructor with a socket passed as a parameter
+	/**
+	 * Constructor with a socket passed as a parameter
+	 * @param socket
+	 */
 	public HTTPResponse(SocketChannel socket) {
 		this.socket = socket;
 	}
 	
-	// Method to query parameters of the request
+	/**
+	 * Method to query parameters of the request
+	 * @param buf: the buffer containing the response
+	 * @return a string representing the server's response
+	 * @throws IOException
+	 */
 	public String queryParameters(ByteBuffer buf) throws IOException {
 		response = this.getFullResponse(buf);
 		return response; // must only take the bottom half
 	}
 	
-	// Method to get the response
+	/**
+	 * Method to get the full server's response
+	 * @param buf: the buffer containing the response
+	 * @return a string representing the server's response
+	 * @throws IOException
+	 */
 	public String getFullResponse(ByteBuffer buf) throws IOException {
     	Charset utf8 = StandardCharsets.UTF_8;
     	while ((socket.read(buf) != -1)) {

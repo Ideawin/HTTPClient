@@ -22,17 +22,28 @@ public class HTTPRequest {
 	
 	private static final String RN = "\r\n";
 	
-	// Default constructor
+	/**
+	 * Default constructor
+	 */
 	public HTTPRequest() {}
 	
-	// Constructor
+	/**
+	 * Constructor
+	 * @param host: The host address
+	 * @param method: The request method (GET or POST)
+	 */
 	public HTTPRequest(String host, String method) {
 		this.host = host;
 		this.method = method;
 	}
 	
-	// Method to execute a request, by opening a socket and write the request into the buffer.
-	// The request is sent to the server, which will send back a response.
+	/**
+	 * Method to execute a request, by opening a socket and write the request into the buffer.
+	 * The request is sent to the server, which will send back a response.
+	 * @param verbose: true if verbose, else will only get the parameters
+	 * @return a string representing the server's response
+	 * @throws IOException
+	 */
 	public String execute(Boolean verbose) throws IOException {
 		SocketAddress endpoint = new InetSocketAddress(host, PORT);
         try (SocketChannel socket = SocketChannel.open()) {
@@ -59,37 +70,59 @@ public class HTTPRequest {
         return "";
 	}
 	
-	// Method to combine all headers and entity body together in one single String (request)
+	/**
+	 * Method to combine all headers and entity body together in one single String (request)
+	 */
 	public void createRequest() {
 	}
 	
-	// Method to add a request header into the HashMap requestHeader
+	/**
+	 * Method to add a request header into the HashMap requestHeader
+	 * @param key: key of the header
+	 * @param value: value of the header
+	 */
 	public void addRequestHeader(String key, String value) {
 		requestHeader.put(key, value);
 	}
 	
-	// Method to add an entity header into the HashMap entityHeader
+	/**
+	 * Method to add an entity header into the HashMap entityHeader
+	 * @param key: key of the entity header
+	 * @param value: value of the entity header
+	 */
 	public void addEntityHeader(String key, String value) {
 		entityHeader.put(key, value);
 	}
 	
-	// Method to set the entity body
+	/**
+	 * Method to set the entity body
+	 * @param body: the entity body of the request
+	 */
 	public void setEntityBody(String body)
 	{
 		this.entityBody = body;
 	}
 	
-	// Method to set the host
+	/**
+	 * Method to set the host
+	 * @param host: host address
+	 */
 	public void setHost(String host) {
 		this.host = host;
 	}
 	
-	// Method to set the command
+	/**
+	 * Method to set the request method
+	 * @param method: the request method (GET/POST)
+	 */
 	public void setMethod(String method) {
 		this.method = method;
 	}
 	
-	// Method to set the request URI
+	/**
+	 * Method to set the request URI
+	 * @param requestURI: the request URI
+	 */
 	public void setRequestURI(String requestURI) {
 		this.requestURI = requestURI;
 	}
