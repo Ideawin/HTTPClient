@@ -16,6 +16,7 @@ import java.util.List;
 
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
+import joptsimple.OptionSpec;
 
 public class HTTPClient {
 	
@@ -25,6 +26,7 @@ public class HTTPClient {
 	// List of supported commands
 	private static HashMap<String, Boolean> supportedCommands = null;
 	private static OptionParser parser = null;
+	private static OptionSpec<String> optSpecHeaders = null;
 	
 	// App name
 	private static final String APP_NAME = "httpc";
@@ -67,8 +69,9 @@ public class HTTPClient {
 		// Parser rules and definition
 		parser = new OptionParser();
         parser.accepts("v", "Prints the detail of the response such as protocol, status, and headers.");
-        parser.accepts("h", "key:value Associates headers to HTTP Request with the format")
-        	.withRequiredArg();
+        optSpecHeaders = parser.accepts("h", "key:value Associates headers to HTTP Request with the format")
+        		.withRequiredArg()
+        		.ofType( String.class );
         parser.accepts("d", "string Associates an inline data to the body HTTP POST request")
         	.withRequiredArg();
         parser.accepts("f", "file Associates the content of a file to the body HTTP POST")
@@ -123,10 +126,10 @@ public class HTTPClient {
         
         // Headers
         if(opts.has("h")) {
-        	List<String> headers = (ArrayList<String>) opts.valuesOf("h");
+        	List<String> headers = opts.valuesOf(optSpecHeaders);
         	for(String header : headers) {
         		String tempHeader = header;
-        		if(tempHeader.length() - tempHeader.replace(".", "").length() == 1) { 
+        		if(tempHeader.length() - tempHeader.replace(":", "").length() == 1) { 
         			String[] headerKeyValue = header.split(":");
 					request.addRequestHeader(headerKeyValue[0], headerKeyValue[1]);
         		} else {
