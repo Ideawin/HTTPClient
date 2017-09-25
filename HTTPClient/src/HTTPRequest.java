@@ -17,7 +17,8 @@ public class HTTPRequest {
 	private HashMap<String,String> requestHeader;
 	private HashMap<String,String> entityHeader;
 	private String entityBody;
-	private String request = "GET /get?course=networking&assignment=1 HTTP/1.0\r\nHost: httpbin.org\r\n\r\n";
+	private String request;
+	//request = "GET /get?course=networking&assignment=1 HTTP/1.0\r\nHost: httpbin.org\r\n\r\n";
 	//request = "GET /status/418 HTTP/1.0\r\nHost: httpbin.org\r\n\r\n";
 	
 	private static final String RN = "\r\n";
@@ -25,7 +26,12 @@ public class HTTPRequest {
 	/**
 	 * Default constructor
 	 */
-	public HTTPRequest() {}
+	public HTTPRequest() {
+		requestHeader = new HashMap<String,String>();
+		entityHeader = new HashMap<String,String>();
+		entityBody = "";
+		request = "";
+	}
 	
 	/**
 	 * Constructor
@@ -74,6 +80,18 @@ public class HTTPRequest {
 	 * Method to combine all headers and entity body together in one single String (request)
 	 */
 	public void createRequest() {
+		request = method + " " + requestURI + " HTTP/1.0\r\nHost: " + host + "\r\n";
+		if (!requestHeader.isEmpty()) {
+			for (String key : requestHeader.keySet()) {
+				request += key + ": " + requestHeader.get(key) + "\r\n";
+			}
+		}
+		if (!entityBody.isEmpty()) {
+			request += "\r\n" + entityBody + "\r\n\r\n";
+		}
+		else
+			request += "\r\n";
+		System.out.println(request);
 	}
 	
 	/**
@@ -116,7 +134,7 @@ public class HTTPRequest {
 	 * @param method: the request method (GET/POST)
 	 */
 	public void setMethod(String method) {
-		this.method = method;
+		this.method = method.toUpperCase();
 	}
 	
 	/**
