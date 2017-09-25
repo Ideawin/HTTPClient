@@ -15,7 +15,6 @@ public class HTTPRequest {
 	private String method;
 	private String requestURI;
 	private HashMap<String,String> requestHeader;
-	private HashMap<String,String> entityHeader;
 	private String entityBody;
 	private String request;
 	//request = "GET /get?course=networking&assignment=1 HTTP/1.0\r\nHost: httpbin.org\r\n\r\n";
@@ -28,7 +27,6 @@ public class HTTPRequest {
 	 */
 	public HTTPRequest() {
 		requestHeader = new HashMap<String,String>();
-		entityHeader = new HashMap<String,String>();
 		entityBody = "";
 		request = "";
 	}
@@ -39,8 +37,11 @@ public class HTTPRequest {
 	 * @param method: The request method (GET or POST)
 	 */
 	public HTTPRequest(String host, String method) {
+		requestHeader = new HashMap<String,String>();
 		this.host = host;
 		this.method = method;
+		entityBody = "";
+		request = "";
 	}
 	
 	/**
@@ -104,21 +105,14 @@ public class HTTPRequest {
 	}
 	
 	/**
-	 * Method to add an entity header into the HashMap entityHeader
-	 * @param key: key of the entity header
-	 * @param value: value of the entity header
-	 */
-	public void addEntityHeader(String key, String value) {
-		entityHeader.put(key, value);
-	}
-	
-	/**
 	 * Method to set the entity body
 	 * @param body: the entity body of the request
 	 */
 	public void setEntityBody(String body)
 	{
 		this.entityBody = body;
+		String contentLength = Integer.toString(entityBody.length());
+		requestHeader.put("Content-Length", contentLength); // add a new header for the Content-Length
 	}
 	
 	/**
