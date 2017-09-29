@@ -1,3 +1,5 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
@@ -17,6 +19,7 @@ public class HTTPRequest {
 	private HashMap<String,String> requestHeader;
 	private String entityBody;
 	private String request;
+	private String outputFilename;
 	
 	/**
 	 * Default constructor
@@ -49,6 +52,7 @@ public class HTTPRequest {
 	 */
 	public String execute(Boolean verbose) throws IOException {
 		SocketAddress endpoint = new InetSocketAddress(host, PORT);
+		String responseString = "";
         try (SocketChannel socket = SocketChannel.open()) {
             socket.connect(endpoint);
             createRequest();
@@ -62,15 +66,29 @@ public class HTTPRequest {
             HTTPResponse response = new HTTPResponse(socket);
             if (verbose)
             {
-            	return response.getFullResponse(buf);
+            	responseString = response.getFullResponse(buf);
             }
-            else
-            	return response.queryParameters(buf);
-            
+            else {
+            	responseString = response.queryParameters(buf);
+            }
         } catch (IOException e) {
         	System.out.println("Exception in execute(Boolean)");
         }
-        return "";
+        
+        // Output file if any
+        if(this.outputFilename != null && this.outputFilename.length() > 0) {
+        	String responseBody = responseString;
+        	if(verbose) {
+        		String[] responseArray = responseString.split("\r\n");
+        		responseBody = responseArray[responseArray.length - 1];
+        	} 
+        	BufferedWriter outputFileWriter = new BufferedWriter(new FileWriter(this.outputFilename));
+			outputFileWriter.write(responseBody);
+			outputFileWriter.close();
+			System.out.println("Response written to output file successfully.");
+        }
+        
+        return responseString;
 	}
 	
 	/**
@@ -133,5 +151,13 @@ public class HTTPRequest {
 	 */
 	public void setRequestURI(String requestURI) {
 		this.requestURI = requestURI;
+	}
+	
+	/**
+	 * Method to set the output filename
+	 * @param outputFilename
+	 */
+	public void setOutputFilename(String outputFilename) {
+		this.outputFilename = outputFilename;
 	}
 }

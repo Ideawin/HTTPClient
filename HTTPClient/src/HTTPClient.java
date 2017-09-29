@@ -1,5 +1,8 @@
 import static java.util.Arrays.asList;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
@@ -72,6 +75,8 @@ public class HTTPClient {
         parser.accepts("d", "string Associates an inline data to the body HTTP POST request")
         	.withRequiredArg();
         parser.accepts("f", "file Associates the content of a file to the body HTTP POST")
+        	.withRequiredArg();
+        parser.accepts("o", "file The body of the HTTP response will be written to the given file")
         	.withRequiredArg();
 	}
 	
@@ -164,6 +169,11 @@ public class HTTPClient {
 					return false;
 				}
         	}
+        }
+        
+        // Output file
+        if(opts.has("o")) {
+        	request.setOutputFilename((String) opts.valueOf("o"));
         }
         
         // URL (host and URI)
