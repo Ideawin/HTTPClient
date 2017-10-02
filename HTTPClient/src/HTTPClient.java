@@ -50,7 +50,7 @@ public class HTTPClient {
 		// Validate the passed arguments and execute
 		HTTPRequest request = new HTTPRequest();
 		if(processCommand(args, request)) {
-			String response = request.execute(hasVerbose);
+			String response = request.execute(hasVerbose, 5);
 			System.out.println("Response is:\n" + response);
 		}
 	}

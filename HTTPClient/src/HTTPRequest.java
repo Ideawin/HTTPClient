@@ -50,10 +50,11 @@ public class HTTPRequest {
 	 * Method to execute a request, by opening a socket and write the request into the buffer.
 	 * The request is sent to the server, which will send back a response.
 	 * @param verbose: true if verbose, else will only get the parameters
+	 * @param numberOfRedirect: number of maximum times to redirect
 	 * @return a string representing the server's response
 	 * @throws IOException
 	 */
-	public String execute(Boolean verbose) throws IOException {
+	public String execute(Boolean verbose, int numberOfRedirect) throws IOException {
 		// Open new socket
 		SocketAddress endpoint = new InetSocketAddress(host, PORT);
 		String responseString = "";
@@ -82,26 +83,36 @@ public class HTTPRequest {
             else {
             	responseString = response.queryParameters(buf);
             }
+            
+            // Check status line
+            if(!response.getURL().isEmpty() && numberOfRedirect > 0) {
+            	// Recursive case
+            	this.setUrl(response.getURL());
+            	this.parseUrl();
+            	// Execute again
+        		return execute(verbose, numberOfRedirect - 1);
+            } else {
+            	// Base case
+            	// Output file if any
+                if(this.outputFilename != null && this.outputFilename.length() > 0) {
+                	String responseBody = responseString;
+                	// If verbose is true
+                	if(verbose) {
+                		String[] responseArray = responseString.split("\r\n");
+                		// Get the response body so it can be output to a file
+                		responseBody = responseArray[responseArray.length - 1];
+                	} 
+                	BufferedWriter outputFileWriter = new BufferedWriter(new FileWriter(this.outputFilename));
+        			outputFileWriter.write(responseBody);
+        			outputFileWriter.close();
+        			System.out.println("Response written to output file successfully.");
+                }
+                return responseString;
+            }
         } catch (IOException e) {
         	System.out.println("Exception in execute(Boolean)");
         }
-        
-        // Output file if any
-        if(this.outputFilename != null && this.outputFilename.length() > 0) {
-        	String responseBody = responseString;
-        	// If verbose is true
-        	if(verbose) {
-        		String[] responseArray = responseString.split("\r\n");
-        		// get the response body so it can be output to a file
-        		responseBody = responseArray[responseArray.length - 1];
-        	} 
-        	BufferedWriter outputFileWriter = new BufferedWriter(new FileWriter(this.outputFilename));
-			outputFileWriter.write(responseBody);
-			outputFileWriter.close();
-			System.out.println("Response written to output file successfully.");
-        }
-        
-        return responseString;
+        return "";
 	}
 	
 	/**
@@ -188,14 +199,18 @@ public class HTTPRequest {
 	 * Method to parse the url
 	 */
 	public void parseUrl() {
-		 URL urlObj;
-		 try {
-			 urlObj = new URL(url);
-			 setHost(urlObj.getHost());
-			 addRequestHeader("Host", urlObj.getHost());
-			 setRequestURI(urlObj.getPath()); 
-		 } catch (MalformedURLException e) {
-			 System.err.println(e.getMessage());
-		 }
+		if(this.url.charAt(0) == '/') {
+			setRequestURI(url); 
+		} else {
+			URL urlObj;
+			 try {
+				 urlObj = new URL(url);
+				 setHost(urlObj.getHost());
+				 addRequestHeader("Host", urlObj.getHost());
+				 setRequestURI(urlObj.getPath()); 
+			 } catch (MalformedURLException e) {
+				 System.err.println(e.getMessage());
+			 }
+		}
 	}
 }

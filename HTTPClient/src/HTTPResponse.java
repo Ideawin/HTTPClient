@@ -81,5 +81,9 @@ public class HTTPResponse {
 	
 	}
 	
+	public String getURL() {
+		return this.url;
+	}
+	
 	
 }
