@@ -64,7 +64,6 @@ public class HTTPClient {
 		supportedCommands.put("help", true);
 		supportedCommands.put("get", true);
 		supportedCommands.put("post", true);
-		supportedCommands.put("put", false);
 		
 		// Parser rules and definition
 		parser = new OptionParser();
@@ -182,6 +181,7 @@ public class HTTPClient {
 		try {
 			urlObj = new URL(url);
 			request.setHost(urlObj.getHost());
+			request.addRequestHeader("Host", urlObj.getHost());
 	        request.setRequestURI(urlObj.getPath()); 
 		} catch (MalformedURLException e) {
 			System.err.println(e.getMessage());
