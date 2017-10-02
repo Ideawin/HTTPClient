@@ -11,6 +11,7 @@ public class HTTPResponse {
 	private String response = "";
 	private SocketChannel socket;
 	private String statusLine = "";
+	private String url = "";
 
 	/**
 	 * Default constructor
@@ -50,7 +51,7 @@ public class HTTPResponse {
 		    response += utf8.decode(buf);
 		    buf.clear();
 		}
-    	statusLine = response.substring(0, response.indexOf("\n"));
+    	checkForRedirection();
     	return response;
 	}
 	
@@ -60,8 +61,24 @@ public class HTTPResponse {
 	 */
 	public String getStatusCode() {
 		String statusCode = statusLine.substring(9, 10);
-		System.out.println(statusCode);
 		return statusCode;
+	}
+	
+	/**
+	 * Method to obtain the url of the redirected request
+	 */
+	public void checkForRedirection() {
+		statusLine = response.substring(0, response.indexOf("\n"));
+		String statusCode = statusLine.substring(9, 10);
+		if (statusCode.equals("3")) {
+    		String[] responseArray = response.split("\r\n");
+    		for (int i = 0; i<responseArray.length;i++) {
+    			if (responseArray[i].length() > 9 && responseArray[i].substring(0, 8).equals("Location")) {
+    				url = responseArray[i].substring(10);
+    			}
+    		}
+		}
+	
 	}
 	
 	
