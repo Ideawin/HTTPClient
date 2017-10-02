@@ -51,15 +51,23 @@ public class HTTPRequest {
 	 * @throws IOException
 	 */
 	public String execute(Boolean verbose) throws IOException {
+		// Open new socket
 		SocketAddress endpoint = new InetSocketAddress(host, PORT);
 		String responseString = "";
         try (SocketChannel socket = SocketChannel.open()) {
+        	// Connect to socket
             socket.connect(endpoint);
+            
+            // Create a request, adding all request headers and entity body if applicable
             createRequest();
+            
+            // Write request to the socket using a buffer
             System.out.println("Sending request...");
             Charset utf8 = StandardCharsets.UTF_8;
             ByteBuffer buf = utf8.encode(request);
             socket.write(buf);
+            
+            // Clear the buffer
             buf.clear();
 
             // Get the response from server
@@ -78,8 +86,10 @@ public class HTTPRequest {
         // Output file if any
         if(this.outputFilename != null && this.outputFilename.length() > 0) {
         	String responseBody = responseString;
+        	// If verbose is true
         	if(verbose) {
         		String[] responseArray = responseString.split("\r\n");
+        		// get the response body so it can be output to a file
         		responseBody = responseArray[responseArray.length - 1];
         	} 
         	BufferedWriter outputFileWriter = new BufferedWriter(new FileWriter(this.outputFilename));
@@ -95,7 +105,9 @@ public class HTTPRequest {
 	 * Method to combine all headers and entity body together in one single String (request)
 	 */
 	public void createRequest() {
+		// first line is the request line
 		request = method + " " + requestURI + " HTTP/1.0\r\n";
+		// next few lines are the header lines (including Host)
 		if (!requestHeader.isEmpty()) {
 			for (String key : requestHeader.keySet()) {
 				request += key + ": " + requestHeader.get(key) + "\r\n";

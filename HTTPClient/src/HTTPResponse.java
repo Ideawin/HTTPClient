@@ -55,11 +55,13 @@ public class HTTPResponse {
 	}
 	
 	/**
-	 * Method to get the status line of the response
+	 * Method to get the status code of the response's status line
 	 * @return
 	 */
-	public String getStatusLine() {
-		return statusLine;
+	public String getStatusCode() {
+		String statusCode = statusLine.substring(9, 10);
+		System.out.println(statusCode);
+		return statusCode;
 	}
 	
 	
