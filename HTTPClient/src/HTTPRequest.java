@@ -95,7 +95,7 @@ public class HTTPRequest {
 	 * Method to combine all headers and entity body together in one single String (request)
 	 */
 	public void createRequest() {
-		request = method + " " + requestURI + " HTTP/1.0\r\nHost: " + host + "\r\n";
+		request = method + " " + requestURI + " HTTP/1.0\r\n";
 		if (!requestHeader.isEmpty()) {
 			for (String key : requestHeader.keySet()) {
 				request += key + ": " + requestHeader.get(key) + "\r\n";

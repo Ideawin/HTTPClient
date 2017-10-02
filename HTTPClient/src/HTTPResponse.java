@@ -10,6 +10,7 @@ public class HTTPResponse {
 	// Attributes
 	private String response = "";
 	private SocketChannel socket;
+	private String statusLine = "";
 
 	/**
 	 * Default constructor
@@ -49,7 +50,16 @@ public class HTTPResponse {
 		    response += utf8.decode(buf);
 		    buf.clear();
 		}
+    	statusLine = response.substring(0, response.indexOf("\n"));
     	return response;
+	}
+	
+	/**
+	 * Method to get the status line of the response
+	 * @return
+	 */
+	public String getStatusLine() {
+		return statusLine;
 	}
 	
 	
