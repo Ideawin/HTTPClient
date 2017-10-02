@@ -2,7 +2,9 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.MalformedURLException;
 import java.net.SocketAddress;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.Charset;
@@ -20,6 +22,7 @@ public class HTTPRequest {
 	private String entityBody;
 	private String request;
 	private String outputFilename;
+	private String url;
 	
 	/**
 	 * Default constructor
@@ -171,5 +174,28 @@ public class HTTPRequest {
 	 */
 	public void setOutputFilename(String outputFilename) {
 		this.outputFilename = outputFilename;
+	}
+	
+	/**
+	 * Method to set the url
+	 * @param url
+	 */
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	
+	/**
+	 * Method to parse the url
+	 */
+	public void parseUrl() {
+		 URL urlObj;
+		 try {
+			 urlObj = new URL(url);
+			 setHost(urlObj.getHost());
+			 addRequestHeader("Host", urlObj.getHost());
+			 setRequestURI(urlObj.getPath()); 
+		 } catch (MalformedURLException e) {
+			 System.err.println(e.getMessage());
+		 }
 	}
 }

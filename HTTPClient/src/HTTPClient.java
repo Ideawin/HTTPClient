@@ -177,16 +177,9 @@ public class HTTPClient {
         
         // URL (host and URI)
         String url = args[args.length-1];
-        URL urlObj;
-		try {
-			urlObj = new URL(url);
-			request.setHost(urlObj.getHost());
-			request.addRequestHeader("Host", urlObj.getHost());
-	        request.setRequestURI(urlObj.getPath()); 
-		} catch (MalformedURLException e) {
-			System.err.println(e.getMessage());
-			return false;
-		}
+        request.setUrl(url);
+        request.parseUrl();
+      
 		return true;
 	}
 	
