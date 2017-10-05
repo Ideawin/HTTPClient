@@ -34,19 +34,6 @@ public class HTTPRequest {
 	}
 	
 	/**
-	 * Constructor
-	 * @param host: The host address
-	 * @param method: The request method (GET or POST)
-	 */
-	public HTTPRequest(String host, String method) {
-		requestHeader = new HashMap<String,String>();
-		this.host = host;
-		this.method = method;
-		entityBody = "";
-		request = "";
-	}
-	
-	/**
 	 * Method to execute a request, by opening a socket and write the request into the buffer.
 	 * The request is sent to the server, which will send back a response.
 	 * @param verbose: true if verbose, else will only get the parameters
