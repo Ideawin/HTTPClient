@@ -194,7 +194,12 @@ public class HTTPRequest {
 				 urlObj = new URL(url);
 				 setHost(urlObj.getHost());
 				 addRequestHeader("Host", urlObj.getHost());
-				 setRequestURI(urlObj.getPath()); 
+				 
+				 String requestURIAndQuery = urlObj.getPath();
+				 if(urlObj.getQuery() != null && !urlObj.getQuery().isEmpty()) {
+					 requestURIAndQuery += "?" + urlObj.getQuery();
+				 }
+				 setRequestURI(requestURIAndQuery); 
 			 } catch (MalformedURLException e) {
 				 System.err.println(e.getMessage());
 			 }
