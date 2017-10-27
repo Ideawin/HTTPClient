@@ -21,7 +21,7 @@ import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
 
-public class HTTPClient {
+public class HTTPClient implements Runnable {
 	
 	// Variable required for the execution of the command at the main level
 	private static boolean hasVerbose;
@@ -37,20 +37,36 @@ public class HTTPClient {
 	private static final String ERR_GET_WITH_BODY = "GET method should not contain in-line data or file";
 	private static final String ERR_POST_DATA_AND_FILE = "POST only allows one of the following: in-line data OR file, but not both";
 	
+	// Passed arguments
+	private String [] args = null;
+	
 	/**
-	 * Main method, process the command entered by the user
+	 * Constructor
 	 * @param args
 	 * @throws IOException
 	 */
-	public static void main(String[] args) throws IOException {
-		
+	public HTTPClient(String[] args) {
+		this.args = args;
 		// Initiate any necessary variables
 		initialize();
-		
+	}
+	
+	/**
+	 * Start run in background
+	 */
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
 		// Validate the passed arguments and execute
 		HTTPRequest request = new HTTPRequest();
 		if(processCommand(args, request)) {
-			String response = request.execute(hasVerbose, 5);
+			String response = "";
+			try {
+				response = request.execute(hasVerbose, 5);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			System.out.println("Response is:\n" + response);
 		}
 	}
@@ -232,4 +248,6 @@ public class HTTPClient {
 			}
 		}
 	}
+
+	
 }

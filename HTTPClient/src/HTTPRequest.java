@@ -15,7 +15,7 @@ public class HTTPRequest {
 	
 	// Attributes
 	private String host;
-	private static final int PORT = 80;
+	private static final int PORT = 8080;
 	private String method;
 	private String requestURI;
 	private HashMap<String,String> requestHeader;
@@ -57,7 +57,6 @@ public class HTTPRequest {
             Charset utf8 = StandardCharsets.UTF_8;
             ByteBuffer buf = utf8.encode(request);
             socket.write(buf);
-            
             // Clear the buffer
             buf.clear();
 
