@@ -21,7 +21,7 @@ import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
 
-public class HTTPClient implements Runnable {
+public class HTTPClient extends Thread {
 	
 	// Variable required for the execution of the command at the main level
 	private static boolean hasVerbose;
@@ -47,8 +47,6 @@ public class HTTPClient implements Runnable {
 	 */
 	public HTTPClient(String[] args) {
 		this.args = args;
-		// Initiate any necessary variables
-		initialize();
 	}
 	
 	/**
@@ -67,7 +65,7 @@ public class HTTPClient implements Runnable {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			System.out.println("Response is:\n" + response);
+			System.out.println("Response is for thread id " + Thread.currentThread().getId() + ":\n" + response);
 		}
 	}
 
@@ -103,7 +101,7 @@ public class HTTPClient implements Runnable {
 	 * @param request - HTTP request on which the arguments will be applied
 	 * @return true if the command is ready to be executed, false otherwise
 	 */
-	public static boolean processCommand(String[] args, HTTPRequest request) {
+	public boolean processCommand(String[] args, HTTPRequest request) {
 		// Verify that we have sufficient args
 		if(args == null || args.length < 1) {
 			System.err.println(ERR_INVALID_COMMAND);

@@ -22,9 +22,10 @@ public class MultithreadedHTTPClient {
 		String[] read = {"get", "-v", "http://localhost:8080/test.txt"};
 		String[] write = {"post", "-v", "-d", "\"allloasdafdddddddddddddddddddddddddddddddasda asd asd aasdas asd asd ad adasd asd as dad a doooo\"", "http://localhost:8080/test.txt"};
 		
+		HTTPClient.initialize();
 		for(int i=0; i<numberOfThreads; i++) {
-			new HTTPClient(write).run();
-			new HTTPClient(read).run();
+			new HTTPClient(write).start();
+			new HTTPClient(read).start();
 		}
 	}
 }
