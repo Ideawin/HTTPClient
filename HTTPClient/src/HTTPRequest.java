@@ -53,7 +53,7 @@ public class HTTPRequest {
             createRequest();
             
             // Write request to the socket using a buffer
-            System.out.println("Sending request...");
+            System.out.println("Sending request for thread id " + Thread.currentThread().getId() + "...");
             Charset utf8 = StandardCharsets.UTF_8;
             ByteBuffer buf = utf8.encode(request);
             socket.write(buf);
